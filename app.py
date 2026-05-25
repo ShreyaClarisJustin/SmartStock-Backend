@@ -17,10 +17,11 @@ from middleware.auth_middleware import authenticate_token
 # --------------------------
 # APP SETUP
 # --------------------------
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # FRONTEND_DIR = os.path.join(BASE_DIR, "../frontend")
 
-app = Flask(__name__, static_folder=FRONTEND_DIR, static_url_path="")
+# app = Flask(__name__, static_folder=FRONTEND_DIR, static_url_path="")
+app = Flask(__name__)
 
 # Configure CORS to allow preflight requests
 CORS(app, 
