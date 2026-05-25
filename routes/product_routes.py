@@ -21,15 +21,25 @@ def init_product_routes(mongo_instance, app=None):
 @authenticate_token
 def get_products():
     try:
+        if mongo is None:
+            print("ERROR: mongo is None")
+            return jsonify({"error": "Database not initialized"}), 500
+            
         products_collection = mongo.db.products
         products = []
+        
+        print(f"Fetching products for user: {request.user}")
         
         for product in products_collection.find():
             product["_id"] = str(product["_id"])
             products.append(product)
         
+        print(f"Found {len(products)} products")
         return jsonify(products), 200
     except Exception as e:
+        print(f"Error fetching products: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
 
@@ -79,7 +89,6 @@ def add_product():
 # -------------------------
 @product_bp.route("/<product_id>/stock", methods=["PUT"])
 @authenticate_token
-@verify_admin
 def update_stock(product_id):
     try:
         data = request.json
