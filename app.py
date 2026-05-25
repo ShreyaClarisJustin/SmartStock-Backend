@@ -28,8 +28,11 @@ CORS(app,
      methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
      allow_headers=["Content-Type", "Authorization"])
 
-app.config["MONGO_URI"] = "mongodb://127.0.0.1:27017/authDB"
-app.config["SECRET_KEY"] = "MY_SECRET_KEY"
+# app.config["MONGO_URI"] = "mongodb+srv://<smartstock>:<smartstock123>@cluster0.58zie8k.mongodb.net/authDB?appName=Cluster0"
+# app.config["SECRET_KEY"] = "MY_SECRET_KEY"
+
+app.config["MONGO_URI"] = os.getenv("MONGO_URI")
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 
 mongo = PyMongo(app)
 
@@ -59,16 +62,9 @@ def handle_preflight():
 # --------------------------
 @app.route("/")
 def index():
-    return send_from_directory(FRONTEND_DIR, "index.html")
+    return jsonify({"message": "SmartStock Backend Running"})
 
-@app.route("/<path:filename>")
-def serve_static(filename):
-    """Serve static files from frontend directory"""
-    try:
-        return send_from_directory(FRONTEND_DIR, filename)
-    except:
-        # If file not found, return index.html for SPA routing
-        return send_from_directory(FRONTEND_DIR, "index.html"), 404
+
 
 # --------------------------
 # DB COLLECTIONS
